@@ -275,7 +275,7 @@ function ShareSocial(props: IndexPropsType) {
           data-testid="copy-btn"
           onClick={() => copyToClipboard(url)}
         >
-          <p> {isCopied ? "Copied" : "Copy"} </p>
+          <p> {isCopied ? props?.labels?.copied ?? "Copied" : props?.labels?.copy ?? "Copy"} </p>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
-import { render, screen, fireEvent, getByTestId } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from '../App';
-import SocialShare from '../components/ShareSocial';
+import { ShareSocial as SocialShare } from '../components/ShareSocial';
 
 describe("test homepage ", () => {
   test('check index page', () => {
@@ -51,7 +51,30 @@ describe("test social share component", () => {
     expect(screen.queryByTestId('copy-btn')).not.toBeEmptyDOMElement()
   });
 
-
+  test('copy button toggles text from "copyyy" to "copieddd"', async () => {
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: jest.fn().mockResolvedValue(),
+      },
+    });
+  
+    render(
+      <SocialShare
+        socialTypes={['facebook']}
+        url="http://sifatul.github.io/"
+        onSocialButtonClicked={() => {}}
+        labels={{ copy: 'copyyy', copied: 'copieddd' }}
+      />
+    );
+  
+    const copyBtn = screen.getByTestId('copy-btn');
+  
+    expect(copyBtn).toHaveTextContent('copyyy');
+  
+    fireEvent.click(copyBtn);
+  
+    await waitFor(() => expect(copyBtn).toHaveTextContent('copieddd'));
+  });
 
   test('check page renders custom style', () => {
     const style = {
